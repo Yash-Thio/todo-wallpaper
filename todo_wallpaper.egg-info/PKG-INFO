@@ -1,3 +1,26 @@
+Metadata-Version: 2.4
+Name: todo-wallpaper
+Version: 0.1.0
+Summary: A CLI todo list that renders as your desktop wallpaper
+Author-email: Yash Pandey <pandeyash06@gmail.com>
+License: MIT
+Project-URL: Repository, https://github.com/Yash-Thio/todo-wallpaper
+Project-URL: Issues, https://github.com/Yash-Thio/todo-wallpaper/issues
+Keywords: todo,wallpaper,cli,desktop,gnome
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Environment :: Console
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: Pillow>=10.0.0
+Dynamic: license-file
+
 # Todo-Wallpaper
 
 A simple interactive todo list that appears as your Linux desktop wallpaper.
@@ -48,41 +71,9 @@ This will:
 4. ✓ Install the `todo` command into `~/.local/bin`
 5. ✓ Enable automatic startup on login via systemd
 
-### Install via pip (recommended)
+### Manual Setup
 
-Install from PyPI with pip:
-
-```bash
-pip install todo-wallpaper
-```
-
-After install, run the packaged setup step to enable autostart and install the command wrapper:
-
-```bash
-todo init
-```
-
-### Install via Homebrew (macOS / Linuxbrew)
-
-You can create a Homebrew tap or formula that installs the package; we recommend using the PyPI wheel in the formula. Example (once tap exists):
-
-```bash
-brew install Yash-Thio/tap/todo-wallpaper
-```
-
-### Convenience installer (curl|bash)
-
-If you prefer a single-line installer, you can use the hosted `install.sh` which wraps a pip install:
-
-```bash
-curl -sSL https://raw.githubusercontent.com/Yash-Thio/todo-wallpaper/main/install.sh | bash
-```
-
-This script is a thin convenience wrapper around `pip install`. It supports `--dry-run` and `--system` flags.
-
-### Manual Setup (advanced)
-
-If you prefer to set up manually from source:
+If you prefer to set up manually:
 
 ```bash
 # Install dependencies
@@ -94,11 +85,15 @@ sudo apt install feh fonts-dejavu
 # Generate initial wallpaper
 python3 render.py
 
+# Install the command wrapper
+mkdir -p ~/.local/bin
+ln -sf ~/projects/random/todo-wallpaper/todo ~/.local/bin/todo
+
 # Make sure ~/.local/bin is on PATH
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 source ~/.zshrc
 
-# Enable autostart (Linux systemd)
+# Enable autostart (optional)
 mkdir -p ~/.config/systemd/user
 cp todo-wallpaper-init.service ~/.config/systemd/user/
 systemctl --user daemon-reload
@@ -148,48 +143,6 @@ todo
 todo init
 ```
 
-## Publishing
-
-Follow these steps to publish releases to PyPI and to test uploads with Test PyPI.
-
-1. Create a PyPI account if you don't have one: https://pypi.org/account/register/
-
-2. Create an API token (recommended) instead of a password:
-   - Go to https://pypi.org/manage/account/token/
-   - Create a new token scoped to "Upload packages" and give it a descriptive name.
-   - Copy the token value once — you won't be able to see it again.
-
-3. Add the token to your GitHub repository as a secret named `PYPI_API_TOKEN`:
-   - Repository → Settings → Secrets and variables → Actions → New repository secret
-   - Name: `PYPI_API_TOKEN`
-   - Value: the token you copied from PyPI
-
-4. Test locally with Test PyPI (optional):
-
-```bash
-python3 -m pip install --upgrade build twine
-python3 -m build
-python3 -m twine upload --repository testpypi dist/*
-
-# Install from Test PyPI to verify the package
-python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps todo-wallpaper
-```
-
-5. Publish via GitHub Actions (automated):
-   - Tag a release and push the tag to GitHub:
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-- The CI workflow `.github/workflows/publish.yml` will build the distributions, run a smoke import test, publish to PyPI using `PYPI_API_TOKEN`, and create a GitHub Release.
-
-Notes
-
-- Keep `PYPI_API_TOKEN` secret — treat it like a password.
-- If you want to test the whole CI flow against Test PyPI, you'll need to adjust the publish action to point at Test PyPI or perform a manual `twine upload` as shown above.
-
 This enables automatic wallpaper rendering on login via systemd.
 
 ## Workflow Examples
@@ -222,12 +175,13 @@ done
 
 ## Files Explained
 
-| File         | Purpose                                 |
-| ------------ | --------------------------------------- |
-| `todos.json` | JSON file storing your todo list        |
-| `render.py`  | Generates wallpaper PNG from todos.json |
-| `todo.py`    | CLI tool to add/remove/list todos       |
-| `todo`       | Shell wrapper for the `todo` command    |
+| File         | Purpose                                      |
+| ------------ | -------------------------------------------- |
+| `todos.json` | JSON file storing your todo list             |
+| `render.py`  | Generates wallpaper PNG from todos.json      |
+| `todo.py`    | CLI tool to add/remove/list todos            |
+| `todo`       | Shell wrapper for the `todo` command         |
+| `watch.py`   | Optional: auto-renders on todos.json changes |
 
 | `init.py` | One-command installation + autostart setup |
 | `wallpaper.png` | Generated wallpaper image |
@@ -391,7 +345,7 @@ todo remove 1
 
 ## License
 
-MIT 
+MIT (or your preferred license)
 
 ## Support
 
