@@ -50,25 +50,32 @@ def main() -> int:
 
     # Step 1: Run setup
     print("Step 1: Running setup...")
-    setup_result = subprocess.run(
-        [sys.executable, "setup.py"],
-        cwd=PROJECT_DIR,
-    )
+    setup_script = PROJECT_DIR / "setup.py"
+    if setup_script.exists():
+        setup_result = subprocess.run(
+            [sys.executable, str(setup_script)],
+            cwd=PROJECT_DIR,
+        )
 
-    if setup_result.returncode != 0:
-        print("\n✗ Setup failed. Fix dependencies and try again.")
-        return 1
+        if setup_result.returncode != 0:
+            print("\n✗ Setup failed. Fix dependencies and try again.")
+            return 1
+    else:
+        print("✓ Skipping source setup checks (package install already handled dependencies)")
 
     # Step 2: Install the command wrapper
     print("\nStep 2: Installing the todo command wrapper...")
-    WRAPPER_FILE.chmod(0o755)
-    LOCAL_BIN_DIR.mkdir(parents=True, exist_ok=True)
+    if WRAPPER_FILE.exists():
+        WRAPPER_FILE.chmod(0o755)
+        LOCAL_BIN_DIR.mkdir(parents=True, exist_ok=True)
 
-    if WRAPPER_LINK.exists() or WRAPPER_LINK.is_symlink():
-        WRAPPER_LINK.unlink()
+        if WRAPPER_LINK.exists() or WRAPPER_LINK.is_symlink():
+            WRAPPER_LINK.unlink()
 
-    WRAPPER_LINK.symlink_to(WRAPPER_FILE)
-    print(f"✓ Installed command: {WRAPPER_LINK}")
+        WRAPPER_LINK.symlink_to(WRAPPER_FILE)
+        print(f"✓ Installed command: {WRAPPER_LINK}")
+    else:
+        print("✓ Installed command: todo (package entry point)")
 
     current_path = os.environ.get("PATH", "")
     if str(LOCAL_BIN_DIR) not in current_path.split(":"):

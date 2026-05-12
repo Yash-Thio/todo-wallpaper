@@ -1,10 +1,9 @@
-# todo.py
-from urllib.parse import unquote
-from pathlib import Path
 import json
-import subprocess
 import sys
+import subprocess
 import time
+from pathlib import Path
+from urllib.parse import unquote
 
 # Use absolute paths to work correctly when called from subprocess
 PROJECT_DIR = Path(__file__).parent.resolve()
@@ -321,6 +320,7 @@ def main() -> None:
         print("  add TEXT     - Add a new todo")
         print("  remove IDX   - Remove todo by 1-based index")
         print("  list         - Show all todos")
+        print("  init         - Set up wallpaper autostart")
         exit(1)
 
     command = sys.argv[1]
@@ -343,6 +343,11 @@ def main() -> None:
 
     elif command == "list":
         list_todos()
+
+    elif command == "init":
+        from init import main as init_main
+
+        exit(init_main())
 
     else:
         print(f"✗ Unknown command: {command}")

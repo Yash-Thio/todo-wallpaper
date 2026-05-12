@@ -17,7 +17,7 @@ This repository renders a Linux desktop wallpaper from a JSON todo list and expo
 - [render.py](render.py): Renders `wallpaper.png` from `todos.json` using Pillow.
 - [init.py](init.py): One-time setup. It runs setup, installs the wrapper into `~/.local/bin`, and enables the systemd user service.
 - [todo](todo): Shell wrapper that resolves its own path and forwards to `python3 todo.py`.
-- [setup.py](setup.py): Dependency and environment checker used during setup only.
+
 - [watch.py](watch.py): Optional file-watcher mode. Not part of the normal workflow.
 - [todo-wallpaper-init.service](todo-wallpaper-init.service): systemd user service template. `init.py` writes the active user service to `~/.config/systemd/user/`.
 - [todos.json](todos.json): Persistent todo storage with metadata. It stores `tasks` plus `wallpaper_path` for wallpaper restoration.
@@ -58,7 +58,6 @@ This repository renders a Linux desktop wallpaper from a JSON todo list and expo
 - `todo list`
 - `todo remove 1`
 - `python3 render.py`
-- `python3 setup.py`
 - `python3 init.py`
 
 ## Implementation Notes
