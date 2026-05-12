@@ -33,7 +33,7 @@ jobs:
           python -c "import importlib; importlib.import_module('todo'); print('smoke-import-ok')"
 
       - name: Publish to PyPI
-        if: secrets.PYPI_API_TOKEN != ''
+        if: ${{ secrets.PYPI_API_TOKEN != '' }}
         uses: pypa/gh-action-pypi-publish@v1.6.4
         with:
           user: __token__
