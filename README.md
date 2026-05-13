@@ -148,50 +148,6 @@ todo
 todo init
 ```
 
-## Publishing
-
-Follow these steps to publish releases to PyPI and to test uploads with Test PyPI.
-
-1. Create a PyPI account if you don't have one: https://pypi.org/account/register/
-
-2. Create an API token (recommended) instead of a password:
-   - Go to https://pypi.org/manage/account/token/
-   - Create a new token scoped to "Upload packages" and give it a descriptive name.
-   - Copy the token value once — you won't be able to see it again.
-
-3. Add the token to your GitHub repository as a secret named `PYPI_API_TOKEN`:
-   - Repository → Settings → Secrets and variables → Actions → New repository secret
-   - Name: `PYPI_API_TOKEN`
-   - Value: the token you copied from PyPI
-
-4. Test locally with Test PyPI (optional):
-
-```bash
-python3 -m pip install --upgrade build twine
-python3 -m build
-python3 -m twine upload --repository testpypi dist/*
-
-# Install from Test PyPI to verify the package
-python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps todo-wallpaper
-```
-
-5. Publish via GitHub Actions (automated):
-   - Tag a release and push the tag to GitHub:
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-- The CI workflow `.github/workflows/publish.yml` will build the distributions, run a smoke import test, publish to PyPI using `PYPI_API_TOKEN`, and create a GitHub Release.
-
-Notes
-
-- Keep `PYPI_API_TOKEN` secret — treat it like a password.
-- If you want to test the whole CI flow against Test PyPI, you'll need to adjust the publish action to point at Test PyPI or perform a manual `twine upload` as shown above.
-
-This enables automatic wallpaper rendering on login via systemd.
-
 ## Workflow Examples
 
 ### Daily Routine
@@ -208,16 +164,6 @@ todo list
 # Mark items as done
 todo remove 1  # ✓ emails done
 todo remove 1  # ✓ standup done
-```
-
-### Batch Operations
-
-Add multiple tasks:
-
-```bash
-for task in "Fix bug" "Write docs" "Deploy"; do
-   todo add "$task"
-done
 ```
 
 ## Files Explained
